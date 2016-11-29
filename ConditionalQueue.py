@@ -25,7 +25,8 @@ class ConditionalQueue(Queue):
         If condition_lambda is specified, only an item matching the given condition_lambda can ever be returned 
         from this function. 
         The condition_lambda is called with a queue item each time. If it returns True, the item is returned.
-        WARNING: If no item matched the condition and 'block' is True, the function will hang until 
+        WARNING: If no item matched the condition and 'block' is True, the function will hang at least until a new item
+                 is placed in the queue.
         """
         with self.not_empty:
             endtime = None
