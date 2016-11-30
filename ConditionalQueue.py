@@ -3,9 +3,8 @@ from time import time as _time
 
 
 class ConditionalQueue(Queue):
-    """Create a queue object with a given maximum size.
-
-    If maxsize is <= 0, the queue size is infinite.
+    """
+    Create a queue capable of limiting its get function to a condition.
     """
     def __init__(self, maxsize=0):
         Queue.__init__(self, maxsize=maxsize)
