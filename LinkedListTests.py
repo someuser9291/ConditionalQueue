@@ -55,6 +55,30 @@ class LinkedListTests(unittest.TestCase):
         for index, item in enumerate(self.__list):
             self.assertEqual(item, self.__list[index])
 
+    def test_reverse(self):
+        self.__list.append(1)
+        self.__list.append(2)
+        self.__list.append(3)
+
+        self.assertEqual(1, self.__list[0])
+
+        self.__list.reverse()
+
+        self.assertEqual(3, self.__list[0])
+
+
+    def test_sort(self):
+        self.__list.append(3)
+        self.__list.append(1)
+        self.__list.append(2)
+
+        self.assertEqual(3, self.__list[0])
+
+        self.__list.sort()
+
+        for i in xrange(1, 4):
+            self.assertEqual(i, self.__list[i - 1])
+
 
 if __name__ == "__main__":
     unittest.main()

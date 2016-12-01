@@ -15,7 +15,7 @@ class LinkedList(MutableSequence):
     A list where items are linked to each other.
     """
     def __init__(self, head=None):
-        self.head = head
+        self.__head = head
         self.__length = 0
 
     def append(self, value):
@@ -23,7 +23,7 @@ class LinkedList(MutableSequence):
 
     def insert(self, index, value):
         if index == 0:
-            self.head = Node(value, next_node=self.head)            
+            self.__head = Node(value, next_node=self.__head)            
         else:
             current_node = self.__get_node_at(index - 1)
 
@@ -35,7 +35,7 @@ class LinkedList(MutableSequence):
         self.__length += 1
 
     def remove(self, value):
-        current_node = self.head
+        current_node = self.__head
         previous = None
 
         while current_node is not None:
@@ -46,7 +46,7 @@ class LinkedList(MutableSequence):
             current_node = current_node.next
 
         if previous == None:
-            self.head = current_node.next
+            self.__head = current_node.next
         else:
             previous.next = current_node.next
 
@@ -56,8 +56,8 @@ class LinkedList(MutableSequence):
         popped_node = None
 
         if index == 0:
-            popped_node = self.head
-            self.head = self.head.next
+            popped_node = self.__head
+            self.__head = self.__head.next
         else:
             current_node = self.__get_node_at(index - 1)
 
@@ -69,10 +69,34 @@ class LinkedList(MutableSequence):
         return popped_node.value
 
     # =========================
+    # List interface
+    # =========================
+    def reverse(self):
+        previous = None
+        current_node = self.__head
+
+        while current_node is not None:
+            next_node = current_node.next
+            current_node.next = previous
+            previous = current_node
+            current_node = next_node
+
+        self.__head = previous
+
+    def sort(self, cmp=None, key=None, reverse=False):
+        sorted_list = sorted(self, cmp=cmp, key=key, reverse=reverse)
+
+        # Clear the linked list
+        self.__clear()
+
+        # Extend by adding the sorted list from earlier
+        self.extend(sorted_list)
+
+    # =========================
     # Emulating container type
     # =========================
     def __contains__(self, value):
-        current_node = self.head
+        current_node = self.__head
         found = False
         while current_node is not None and not found:
             if current_node.value == value:
@@ -86,7 +110,7 @@ class LinkedList(MutableSequence):
         return self.__length
 
     def __iter__(self):
-        current_node = self.head
+        current_node = self.__head
 
         while current_node is not None:
             yield current_node.value
@@ -103,6 +127,20 @@ class LinkedList(MutableSequence):
     def __delitem__(self, index):
         self.pop(index)
 
+    def __str__(self):
+        representation = "["
+        current_node = self.__head
+
+        while current_node is not None:
+            representation += "{}".format(current_node.value)
+            current_node = current_node.next
+            if current_node is not None:
+                representation += ", "
+
+        representation += "]"
+
+        return representation
+
     # =========================
     # Internal functions
     # =========================
@@ -110,7 +148,7 @@ class LinkedList(MutableSequence):
         if index > self.__length > 0 or (index < 0 and abs(index) > (self.__length + 1)):
             raise IndexError(index)
 
-        current_node = self.head
+        current_node = self.__head
 
         # Support for negative indexes as indexes from end-to-start
         if index < 0:
@@ -120,3 +158,7 @@ class LinkedList(MutableSequence):
             current_node = current_node.next
 
         return current_node
+
+    def __clear(self):
+        self.__head = None
+        self.__length = 0
