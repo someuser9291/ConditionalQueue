@@ -1,6 +1,8 @@
 from Queue import Queue, Empty
 from time import time as _time
 
+from LinkedList import LinkedList
+
 
 class ConditionalQueue(Queue):
     """
@@ -8,7 +10,8 @@ class ConditionalQueue(Queue):
     """
     def __init__(self, maxsize=0):
         Queue.__init__(self, maxsize=maxsize)
-        self.__items = []
+        # We use a linked list to maximize efficiency when removing items
+        self.__items = LinkedList()
 
     def get(self, block=True, timeout=None, condition_lambda=None):
         """Remove and return an item from the queue.
